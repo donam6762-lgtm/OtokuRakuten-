@@ -1,319 +1,392 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Du Học Nhật Bản · HQSV</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>オトク — Cashback Rakuten qua LINE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600&family=DM+Mono:wght@500&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --sakura:#f7a8b8;
-    --sakura-deep:#e8638a;
-    --indigo:#27355c;
-    --indigo-soft:#3a4a78;
-    --cream:#fdf6f0;
-    --cream-deep:#f6e8db;
-    --gold:#d4a04c;
-    --ink:#2a2530;
-    --rose-glow:rgba(247,168,184,.45);
+    --bg:#FCE7EC; --bg2:#FBDCE4; --surface:#FFFFFF; --surface-2:#FFF4F7;
+    --ink:#4A2C35; --ink-soft:#8A6670; --line:#F4D3DD;
+    --green:#3E7A52; --green-deep:#2F6140; --green-lt:#5B9E6E;
+    --gold:#B8923F; --gold-lt:#E1BE6A; --rose:#D96A86; --petal:#F8C6D3; --rk:#BF0000;
+    --cjk:'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic','Meiryo','PingFang SC','Microsoft YaHei','Malgun Gothic','Apple SD Gothic Neo';
+    --display:'Quicksand','Noto Sans Devanagari','Noto Sans Bengali',var(--cjk),system-ui,sans-serif;
+    --body:'Inter','Noto Sans Devanagari','Noto Sans Bengali',var(--cjk),system-ui,sans-serif;
+    --mono:'DM Mono',ui-monospace,monospace;
   }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    font-family:'Be Vietnam Pro',sans-serif;
-    background:var(--cream);
-    color:var(--ink);
-    overflow-x:hidden;
-    line-height:1.7;
-  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);background-attachment:fixed;color:var(--ink);font-family:var(--body);line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 22px;position:relative;z-index:2}
+  h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.14;letter-spacing:-.01em}
+  .mono{font-family:var(--mono)}
+  a{color:inherit;text-decoration:none}
 
-  /* ---------- floating petals ---------- */
-  .petals{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden;}
-  .petal{
-    position:absolute;top:-40px;width:16px;height:16px;
-    background:radial-gradient(circle at 30% 30%,#ffd0dd,var(--sakura));
-    border-radius:80% 0 80% 0;
-    opacity:.85;
-    animation:fall linear infinite;
-  }
-  @keyframes fall{
-    0%{transform:translateY(-40px) rotate(0deg);opacity:0;}
-    10%{opacity:.9;}
-    100%{transform:translateY(105vh) translateX(120px) rotate(540deg);opacity:.2;}
-  }
+  .petal-f{position:fixed;top:-30px;z-index:1;pointer-events:none;will-change:transform}
+  @keyframes fall{0%{transform:translateY(-30px) rotate(0deg)}100%{transform:translateY(108vh) rotate(420deg)}}
+  @media(prefers-reduced-motion:reduce){.petal-f{display:none}}
 
-  /* ---------- HERO ---------- */
-  .hero{
-    position:relative;
-    min-height:100vh;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;
-    padding:80px 24px 60px;
-    background:
-      radial-gradient(circle at 20% 20%,rgba(247,168,184,.35),transparent 45%),
-      radial-gradient(circle at 85% 75%,rgba(212,160,76,.25),transparent 50%),
-      linear-gradient(160deg,#fff6f4 0%,var(--cream-deep) 100%);
-    overflow:hidden;
-  }
-  .sun{
-    position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
-    background:radial-gradient(circle,var(--sakura-deep),var(--sakura) 55%,transparent 72%);
-    opacity:.18;filter:blur(6px);
-    animation:pulse 9s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+  nav{position:sticky;top:0;z-index:50;background:rgba(252,231,236,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:19px;color:var(--green)}
+  .brand .dot{width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--gold-lt);display:grid;place-items:center;font-size:15px;box-shadow:0 4px 10px rgba(62,122,82,.35)}
+  .lang{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 13px}
+  .lang svg{color:var(--green)}
+  .lang select{border:0;background:none;font-family:var(--body);font-weight:600;font-size:14px;color:var(--ink);cursor:pointer;outline:none;padding-right:4px}
 
-  .badge{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:.78rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--sakura-deep);
-    border:1.5px solid var(--sakura);
-    border-radius:999px;padding:9px 20px;background:rgba(255,255,255,.6);
-    backdrop-filter:blur(4px);
-    animation:rise .9s ease both;
-  }
-  .badge::before{content:"🌸";}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--display);font-weight:700;font-size:16px;border-radius:999px;padding:15px 30px;border:0;cursor:pointer;transition:transform .16s, box-shadow .16s}
+  .btn-pri{background:linear-gradient(135deg,var(--green-lt),var(--green-deep));color:#fff;box-shadow:0 8px 20px rgba(47,97,64,.34), inset 0 1px 0 rgba(255,255,255,.2)}
+  .btn-pri:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(47,97,64,.42)}
+  .btn-gold{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:#3a2a10;box-shadow:0 8px 20px rgba(184,146,63,.34)}
+  .btn-gold:hover{transform:translateY(-2px)}
+  .btn-ghost{background:var(--surface);color:var(--green);border:1.5px solid var(--green-lt)}
+  .btn-ghost:hover{transform:translateY(-2px);background:var(--surface-2)}
 
-  .hero h1{
-    font-family:'Lora',serif;
-    font-weight:600;
-    font-size:clamp(2.6rem,7vw,5rem);
-    line-height:1.08;
-    color:var(--indigo);
-    margin:26px 0 8px;
-    animation:rise .9s ease .1s both;
-  }
-  .hero h1 .accent{
-    color:var(--sakura-deep);
-    font-style:italic;
-    position:relative;
-  }
-  .hero .sub{
-    font-size:clamp(1rem,2.4vw,1.3rem);
-    max-width:640px;color:var(--indigo-soft);font-weight:400;
-    margin:0 auto;
-    animation:rise .9s ease .25s both;
-  }
-  .cta-row{margin-top:38px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:rise .9s ease .4s both;}
-  .btn{
-    font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:1rem;
-    padding:15px 34px;border-radius:999px;cursor:pointer;border:none;
-    text-decoration:none;display:inline-block;transition:transform .25s,box-shadow .25s;
-  }
-  .btn-primary{
-    background:linear-gradient(135deg,var(--sakura-deep),var(--sakura));
-    color:#fff;box-shadow:0 10px 30px var(--rose-glow);
-  }
-  .btn-primary:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px var(--rose-glow);}
-  .btn-ghost{
-    background:transparent;color:var(--indigo);border:1.5px solid var(--indigo-soft);
-  }
-  .btn-ghost:hover{transform:translateY(-3px);background:var(--indigo);color:#fff;}
+  .hero{text-align:center;padding:62px 0 40px}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--gold);background:var(--surface);border:1px solid var(--line);padding:7px 16px;border-radius:999px;margin-bottom:24px}
+  .hero h1{font-size:clamp(34px,6vw,58px);color:var(--green-deep);margin-bottom:18px}
+  .hero h1 .ro{color:var(--rose)}
+  .hero p.sub{font-size:18px;color:var(--ink-soft);max-width:32em;margin:0 auto 30px}
+  .hero .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .hero .note{font-size:13.5px;color:var(--ink-soft);margin-top:18px}
 
-  @keyframes rise{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
+  /* share flow */
+  .shareflow{max-width:780px;margin:14px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 14px 36px -22px rgba(150,70,95,.4)}
+  .shareflow h3{text-align:center;font-size:16.5px;color:var(--green-deep);margin-bottom:18px}
+  .chips{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap}
+  .chip.rk{background:var(--rk);color:#fff;border-color:var(--rk)}
+  .chip.share{background:#fff;color:var(--rose);border:1.5px solid var(--rose)}
+  .chip.line{background:#06C755;color:#fff;border-color:#06C755}
+  .chip.bot{background:var(--gold);color:#3a2a10;border-color:var(--gold)}
+  .chip.link{background:var(--green);color:#fff;border-color:var(--green)}
+  .arrow{color:var(--rose);font-weight:800;font-size:15px}
 
-  /* anniversary ribbon */
-  .anniv{
-    margin-top:54px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center;
-    animation:rise .9s ease .55s both;
-  }
-  .anniv .num{
-    font-family:'Lora',serif;font-size:3.4rem;font-weight:600;color:var(--gold);line-height:1;
-  }
-  .anniv .lbl{text-align:left;}
-  .anniv .lbl b{color:var(--indigo);font-weight:700;}
-  .anniv .lbl span{display:block;font-size:.82rem;color:var(--indigo-soft);letter-spacing:.05em;}
+  .peek{max-width:330px;margin:34px auto 0;background:#fff;border:1px solid var(--line);border-radius:24px;padding:16px;box-shadow:0 20px 50px -20px rgba(150,70,95,.4)}
+  .peek .ph-top{display:flex;align-items:center;gap:9px;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:13px}
+  .peek .ava{width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--gold-lt);display:grid;place-items:center;font-weight:700;font-family:var(--display)}
+  .peek .nm{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink)}
+  .bub{max-width:84%;padding:9px 13px;border-radius:15px;font-size:13px;line-height:1.45;margin-bottom:9px}
+  .bub.usr{background:var(--green);color:#fff;margin-left:auto;border-bottom-right-radius:5px}
+  .bub.usr.share{display:flex;align-items:center;gap:7px;font-family:var(--body);font-weight:600}
+  .bub.bot{background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:5px}
+  .bub.bot b{color:var(--green)}
+  .bub.link{font-family:var(--mono);font-size:11px;word-break:break-all;background:#fff;border:1px dashed var(--green-lt);color:var(--green-deep)}
 
-  /* ---------- SECTION wrapper ---------- */
-  section.block{max-width:1080px;margin:0 auto;padding:90px 24px;}
-  .eyebrow{
-    font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:.75rem;
-    color:var(--sakura-deep);margin-bottom:14px;
-  }
-  .sec-title{
-    font-family:'Lora',serif;font-weight:600;font-size:clamp(2rem,4.5vw,2.9rem);
-    color:var(--indigo);margin-bottom:20px;line-height:1.15;
-  }
-  .lead{font-size:1.12rem;color:var(--indigo-soft);max-width:680px;}
+  section{padding:54px 0}
+  .sec-head{text-align:center;max-width:33em;margin:0 auto 40px}
+  .sec-head .tag{font-size:12.5px;font-weight:700;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:11px}
+  .sec-head h2{font-size:clamp(26px,4vw,40px);color:var(--green-deep)}
+  .sec-head p{color:var(--ink-soft);font-size:17px;margin-top:12px}
 
-  /* reveal on scroll */
-  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease;}
-  .reveal.in{opacity:1;transform:none;}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px 22px;box-shadow:0 10px 26px -18px rgba(150,70,95,.4)}
+  .step .n{width:42px;height:42px;margin-bottom:14px;border-radius:50%;background:linear-gradient(135deg,var(--petal),#fff);border:2px solid var(--green-lt);color:var(--green-deep);font-family:var(--display);font-weight:700;font-size:18px;display:grid;place-items:center}
+  .step h3{font-size:16.5px;color:var(--green-deep);margin-bottom:7px;line-height:1.22}
+  .step p{font-size:14px;color:var(--ink-soft)}
 
-  /* ---------- CARDS ---------- */
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-top:46px;}
-  .card{
-    background:#fff;border-radius:24px;padding:38px 32px;
-    box-shadow:0 20px 50px rgba(39,53,92,.08);
-    border:1px solid rgba(247,168,184,.25);
-    position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;
-  }
-  .card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(232,99,138,.18);}
-  .card::after{
-    content:"";position:absolute;top:-50px;right:-50px;width:120px;height:120px;border-radius:50%;
-    background:radial-gradient(circle,var(--rose-glow),transparent 70%);
-  }
-  .card .ico{font-size:2.4rem;display:block;margin-bottom:18px;}
-  .card h3{font-family:'Lora',serif;font-size:1.4rem;color:var(--indigo);margin-bottom:12px;}
-  .card p{color:var(--indigo-soft);font-size:1rem;}
-  .card .hl{color:var(--sakura-deep);font-weight:700;}
+  .bx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .bx{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px 22px;text-align:center;box-shadow:0 10px 26px -18px rgba(150,70,95,.4)}
+  .bx .ic{font-size:30px;margin-bottom:12px}
+  .bx h3{font-size:17px;color:var(--green-deep);margin-bottom:6px}
+  .bx p{font-size:13.5px;color:var(--ink-soft)}
 
-  /* schools row */
-  .schools{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;}
-  .chip{
-    background:var(--cream-deep);color:var(--indigo);font-weight:600;
-    padding:11px 24px;border-radius:999px;font-size:.98rem;
-    border:1.5px solid transparent;transition:.25s;
-  }
-  .chip:hover{border-color:var(--sakura);background:#fff;transform:translateY(-2px);}
-  .chip.star{background:linear-gradient(135deg,var(--gold),#e8c179);color:#fff;}
-  .chip.star::before{content:"★ ";}
+  .cb-card{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:38px;box-shadow:0 16px 40px -22px rgba(150,70,95,.45);max-width:760px;margin:0 auto}
+  .cb-lead{text-align:center;font-size:17px;color:var(--ink);margin-bottom:30px}
+  .cb-lead b{color:var(--green);font-weight:700}
+  .calc label{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:600;margin-bottom:10px}
+  .calc label .v{font-family:var(--mono);font-size:17px;color:var(--green)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:8px;background:var(--bg2);outline:none;border:1px solid var(--line)}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--green-lt),var(--green-deep));border:4px solid #fff;box-shadow:0 3px 8px rgba(47,97,64,.45);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--green-deep);border:4px solid #fff;cursor:pointer}
+  .presets{display:flex;gap:8px;margin:14px 0 26px;flex-wrap:wrap;justify-content:center}
+  .presets button{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:7px 15px;font-family:var(--mono);font-size:13px;cursor:pointer;color:var(--ink-soft);transition:.15s}
+  .presets button:hover{border-color:var(--green-lt);color:var(--green)}
+  .cb-out{background:linear-gradient(135deg,var(--green-lt),var(--green-deep));border-radius:18px;padding:26px;text-align:center;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+  .cb-out .k{font-size:14px;color:var(--gold-lt);font-weight:600}
+  .cb-out .amt{font-family:var(--mono);font-size:38px;font-weight:500;line-height:1.08;margin:6px 0}
+  .cb-out .note{font-size:12.5px;opacity:.86}
 
-  /* ---------- COMMUNITY banner ---------- */
-  .community{
-    margin:0 auto;max-width:1080px;
-    background:linear-gradient(135deg,var(--indigo) 0%,var(--indigo-soft) 100%);
-    color:#fff;border-radius:30px;padding:64px 48px;text-align:center;position:relative;overflow:hidden;
-  }
-  .community::before{
-    content:"";position:absolute;inset:0;
-    background:radial-gradient(circle at 15% 20%,rgba(247,168,184,.3),transparent 40%),
-              radial-gradient(circle at 85% 80%,rgba(212,160,76,.25),transparent 45%);
-  }
-  .community>*{position:relative;z-index:1;}
-  .community h2{font-family:'Lora',serif;font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:16px;}
-  .community .desc{max-width:640px;margin:0 auto 40px;opacity:.92;font-size:1.08rem;}
-  .stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;}
-  .stat .n{font-family:'Lora',serif;font-size:3rem;font-weight:600;color:var(--sakura);line-height:1;}
-  .stat .t{font-size:.92rem;opacity:.85;letter-spacing:.05em;margin-top:6px;}
+  .faq{display:grid;gap:12px;max-width:760px;margin:0 auto}
+  details{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:3px 22px;box-shadow:0 8px 22px -18px rgba(150,70,95,.4)}
+  details[open]{background:var(--surface-2)}
+  summary{cursor:pointer;list-style:none;padding:18px 0;font-family:var(--display);font-weight:700;font-size:16px;color:var(--green-deep);display:flex;justify-content:space-between;align-items:center;gap:14px}
+  summary::-webkit-details-marker{display:none}
+  summary .pm{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;transition:.25s;color:var(--green)}
+  details[open] summary .pm{transform:rotate(45deg);background:var(--green);color:#fff;border-color:var(--green)}
+  details .ans{padding:0 0 20px;color:var(--ink-soft);font-size:15px}
 
-  /* ---------- CTA final ---------- */
-  .final{text-align:center;padding:100px 24px;}
-  .final h2{font-family:'Lora',serif;font-size:clamp(2rem,5vw,3rem);color:var(--indigo);margin-bottom:18px;line-height:1.2;}
-  .final p{color:var(--indigo-soft);font-size:1.15rem;max-width:560px;margin:0 auto 36px;}
+  .final{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:58px 30px;box-shadow:0 18px 44px -24px rgba(150,70,95,.5);position:relative;overflow:hidden}
+  .final::before,.final::after{content:"🌸";position:absolute;font-size:60px;opacity:.25}
+  .final::before{top:14px;left:18px;transform:rotate(-15deg)}
+  .final::after{bottom:10px;right:18px;transform:rotate(20deg)}
+  .final h2{font-size:clamp(28px,4.4vw,42px);color:var(--green-deep);margin-bottom:14px;position:relative}
+  .final p{color:var(--ink-soft);font-size:18px;margin-bottom:28px;position:relative}
 
-  footer{
-    background:var(--indigo);color:rgba(255,255,255,.8);text-align:center;
-    padding:34px 24px;font-size:.9rem;
-  }
-  footer .heart{color:var(--sakura);}
+  footer{padding:36px 0 54px;text-align:center}
+  footer p{font-size:12.5px;color:var(--ink-soft);max-width:54em;margin:0 auto}
 
-  /* count-up helper invisible until visible handled by JS */
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
+  .rv.in{opacity:1;transform:none}
+
+  @media(max-width:880px){.steps,.bx-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.steps,.bx-grid{grid-template-columns:1fr}.wrap{padding:0 18px}.cb-card{padding:24px}section{padding:46px 0}.chip{font-size:12.5px;padding:8px 12px}}
+  @media(prefers-reduced-motion:reduce){.rv{transition:none;opacity:1;transform:none}.btn:hover{transform:none}}
 </style>
 </head>
 <body>
 
-<div class="petals" id="petals"></div>
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand"><span class="dot">得</span> オトク</div>
+    <label class="lang">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20"/></svg>
+      <select id="langSel" onchange="setLang(this.value)" aria-label="Language">
+        <option value="vi">Tiếng Việt</option>
+        <option value="ja">日本語</option>
+        <option value="zh">中文</option>
+        <option value="ko">한국어</option>
+        <option value="ne">नेपाली</option>
+        <option value="bn">বাংলা</option>
+        <option value="en">English</option>
+      </select>
+    </label>
+  </div>
+</nav>
 
-<!-- ===== HERO ===== -->
-<header class="hero">
-  <div class="sun"></div>
-  <span class="badge">Du học Nhật Bản 2026</span>
-  <h1>Chạm tay vào<br><span class="accent">giấc mơ Nhật Bản</span></h1>
-  <p class="sub">Chi phí hợp lý · Trường uy tín tại Osaka · Đồng hành từ người thật, việc thật. Không nói suông — chỉ có những hành trình đã thành hiện thực.</p>
+<header class="wrap hero">
+  <span class="eyebrow">🌸 <span data-i18n="eyebrow"></span></span>
+  <h1><span data-i18n="hero_t1"></span> <span class="ro" data-i18n="hero_t2"></span></h1>
+  <p class="sub" data-i18n="hero_sub"></p>
   <div class="cta-row">
-    <a href="#lien-he" class="btn btn-primary">Tư vấn miễn phí ngay</a>
-    <a href="#vi-sao" class="btn btn-ghost">Vì sao chọn bên mình?</a>
+    <a href="https://line.me/R/ti/p/@072mfowx" target="_blank" rel="noopener" class="btn btn-pri" data-i18n="hero_cta"></a>
+    <a href="#how" class="btn btn-ghost" data-i18n="hero_cta2"></a>
+  </div>
+  <p class="note" data-i18n="hero_note"></p>
+
+  <div class="shareflow">
+    <h3 data-i18n="shareflow_t"></h3>
+    <div class="chips">
+      <span class="chip rk">Rakuten</span>
+      <span class="arrow">→</span>
+      <span class="chip share">Share ↗</span>
+      <span class="arrow">→</span>
+      <span class="chip line">LINE</span>
+      <span class="arrow">→</span>
+      <span class="chip bot">オトク Bot</span>
+      <span class="arrow">→</span>
+      <span class="chip link">🔗 <span data-i18n="shareflow_link"></span></span>
+    </div>
   </div>
 
-  <div class="anniv">
-    <span class="num">20</span>
-    <span class="lbl"><b>NĂM HQSV</b><span>2006 – 2026 · Bắc – Trung – Nam một nhà 🩵</span></span>
+  <div class="peek" aria-hidden="true">
+    <div class="ph-top"><div class="ava">得</div><div class="nm">オトク Bot</div></div>
+    <div class="bub usr share">↗ <span data-i18n="peek_share"></span></div>
+    <div class="bub bot" data-i18n="peek_b1"></div>
+    <div class="bub bot link">https://hb.afl.rakuten.co.jp/...</div>
+    <div class="bub usr">Done</div>
+    <div class="bub bot" data-i18n="peek_b2"></div>
   </div>
 </header>
 
-<!-- ===== INTRO ===== -->
-<section class="block reveal" id="vi-sao">
-  <p class="eyebrow">Người thật · Việc thật</p>
-  <h2 class="sec-title">Mình đã đưa rất nhiều người sang Nhật — và họ đang sống tốt</h2>
-  <p class="lead">Suốt thời gian qua, mình trực tiếp giới thiệu bạn bè, người thân và bà con hàng xóm sang Nhật du học với mức chi phí tiết kiệm nhất có thể. Đó là những người mình quen biết — đã đi, đã học và đang sinh sống ổn định trên đất Nhật.</p>
+<!-- BENEFITS -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="tag" data-i18n="bx_tag"></div>
+      <h2 data-i18n="bx_title"></h2>
+    </div>
+    <div class="bx-grid">
+      <div class="bx rv"><div class="ic">🎁</div><h3 data-i18n="bx1_t"></h3><p data-i18n="bx1_d"></p></div>
+      <div class="bx rv"><div class="ic">⚡</div><h3 data-i18n="bx2_t"></h3><p data-i18n="bx2_d"></p></div>
+      <div class="bx rv"><div class="ic">🌐</div><h3 data-i18n="bx3_t"></h3><p data-i18n="bx3_d"></p></div>
+    </div>
+  </div>
 </section>
 
-<!-- ===== CARDS ===== -->
-<section class="block" style="padding-top:0;">
-  <div class="cards">
-    <div class="card reveal">
-      <span class="ico">🏫</span>
-      <h3>Trường tiếng uy tín</h3>
-      <p>Hồ sơ được làm trực tiếp cho các trường tiếng hàng đầu tại <span class="hl">Osaka</span>. Riêng <span class="hl">Minami</span> là ngôi trường mình đánh giá rất cao về chất lượng đào tạo.</p>
-      <div class="schools">
-        <span class="chip star">Minami</span>
-        <span class="chip">First Study</span>
-        <span class="chip">Human</span>
+<!-- HOW -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="tag" data-i18n="how_tag"></div>
+      <h2 data-i18n="how_title"></h2>
+      <p data-i18n="how_sub"></p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><div class="n">1</div><h3 data-i18n="s1_t"></h3><p data-i18n="s1_d"></p></div>
+      <div class="step rv"><div class="n">2</div><h3 data-i18n="s2_t"></h3><p data-i18n="s2_d"></p></div>
+      <div class="step rv"><div class="n">3</div><h3 data-i18n="s3_t"></h3><p data-i18n="s3_d"></p></div>
+      <div class="step rv"><div class="n">4</div><h3 data-i18n="s4_t"></h3><p data-i18n="s4_d"></p></div>
+      <div class="step rv"><div class="n">5</div><h3 data-i18n="s5_t"></h3><p data-i18n="s5_d"></p></div>
+      <div class="step rv"><div class="n">6</div><h3 data-i18n="s6_t"></h3><p data-i18n="s6_d"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASHBACK -->
+<section id="cashback">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="tag" data-i18n="cb_tag"></div>
+      <h2 data-i18n="cb_title"></h2>
+    </div>
+    <div class="cb-card rv">
+      <p class="cb-lead" data-i18n="cb_lead"></p>
+      <div class="calc">
+        <label><span data-i18n="cb_price_l"></span> <span class="v" id="vPrice">¥10,000</span></label>
+        <input type="range" id="price" min="1000" max="80000" step="500" value="10000" oninput="calc()">
+        <div class="presets">
+          <button onclick="sp(3000)">¥3,000</button>
+          <button onclick="sp(10000)">¥10,000</button>
+          <button onclick="sp(30000)">¥30,000</button>
+          <button onclick="sp(50000)">¥50,000</button>
+        </div>
+        <div class="cb-out">
+          <div class="k" data-i18n="cb_out_k"></div>
+          <div class="amt" id="oCash">¥200 – ¥320</div>
+          <div class="note" data-i18n="cb_out_note"></div>
+        </div>
       </div>
     </div>
-    <div class="card reveal">
-      <span class="ico">💰</span>
-      <h3>Chi phí linh hoạt</h3>
-      <p>Đi qua trung tâm thường phải đóng <span class="hl">trọn 1 năm</span> học phí. Nhưng với bên mình, nếu bạn <span class="hl">ưu tú & có tinh thần vượt khó</span>, mình đàm phán để bạn chỉ cần đóng trước <span class="hl">6 tháng</span> — đặc quyền không phải nơi nào cũng có.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="tag" data-i18n="faq_tag"></div>
+      <h2 data-i18n="faq_title"></h2>
     </div>
-    <div class="card reveal">
-      <span class="ico">🤝</span>
-      <h3>Cộng đồng vững mạnh</h3>
-      <p>Bạn không chỉ đi học — bạn trở thành một phần của đại gia đình <span class="hl">HQSV</span>, nơi người đi trước luôn dìu dắt người đi sau, để không ai phải bỡ ngỡ nơi xứ người.</p>
+    <div class="faq">
+      <details class="rv"><summary><span data-i18n="q6"></span><span class="pm">+</span></summary><div class="ans" data-i18n="a6"></div></details>
+      <details class="rv"><summary><span data-i18n="q1"></span><span class="pm">+</span></summary><div class="ans" data-i18n="a1"></div></details>
+      <details class="rv"><summary><span data-i18n="q2"></span><span class="pm">+</span></summary><div class="ans" data-i18n="a2"></div></details>
+      <details class="rv"><summary><span data-i18n="q3"></span><span class="pm">+</span></summary><div class="ans" data-i18n="a3"></div></details>
+      <details class="rv"><summary><span data-i18n="q4"></span><span class="pm">+</span></summary><div class="ans" data-i18n="a4"></div></details>
+      <details class="rv"><summary><span data-i18n="q5"></span><span class="pm">+</span></summary><div class="ans" data-i18n="a5"></div></details>
     </div>
   </div>
 </section>
 
-<!-- ===== COMMUNITY ===== -->
-<section class="block reveal">
-  <div class="community">
-    <h2>HQSV — 20 năm một mái nhà 🩵</h2>
-    <p class="desc">Năm nay HQSV tròn 20 năm (2006 – 2026). Hai mươi năm Bắc – Trung – Nam sum họp, sẻ chia trên tinh thần thiện nguyện — để mỗi du học sinh đều có một gia đình chờ sẵn trên đất Nhật.</p>
-    <div class="stats">
-      <div class="stat"><div class="n" data-count="20">0</div><div class="t">Năm gắn bó</div></div>
-      <div class="stat"><div class="n" data-count="500" data-suffix="+">0</div><div class="t">Thành viên</div></div>
-      <div class="stat"><div class="n">Huế</div><div class="t">& khắp mọi miền</div></div>
+<section>
+  <div class="wrap">
+    <div class="final rv">
+      <h2 data-i18n="final_title"></h2>
+      <p data-i18n="final_sub"></p>
+      <a href="https://line.me/R/ti/p/@072mfowx" target="_blank" rel="noopener" class="btn btn-gold" data-i18n="final_cta"></a>
     </div>
   </div>
 </section>
 
-<!-- ===== FINAL CTA ===== -->
-<section class="final reveal" id="lien-he">
-  <h2>Du học Nhật là một hành trình<br>thay đổi cuộc đời 🌸</h2>
-  <p>Nếu bạn đang ấp ủ giấc mơ Nhật Bản nhưng còn lo về chi phí và chỗ dựa — hãy nhắn cho mình. Mình đồng hành cùng bạn từ những bước đầu tiên.</p>
-  <a href="#" class="btn btn-primary">📩 Liên hệ tư vấn ngay hôm nay</a>
-</section>
-
-<footer>
-  Made with <span class="heart">♥</span> bởi cộng đồng HQSV · Happy Birthday 20th · 2006 – 2026
-</footer>
+<footer><div class="wrap"><p data-i18n="footer_fine"></p></div></footer>
 
 <script>
-  // petals
-  const wrap=document.getElementById('petals');
-  for(let i=0;i<22;i++){
-    const p=document.createElement('div');
-    p.className='petal';
-    p.style.left=Math.random()*100+'vw';
-    const s=8+Math.random()*14;
-    p.style.width=p.style.height=s+'px';
-    p.style.animationDuration=(7+Math.random()*9)+'s';
-    p.style.animationDelay=(-Math.random()*10)+'s';
-    p.style.opacity=.4+Math.random()*.5;
-    wrap.appendChild(p);
+const I18N = {
+  eyebrow:{vi:"Hoàn tiền mua sắm qua LINE",ja:"LINEでお買い物キャッシュバック",zh:"通过LINE购物返现",ko:"LINE로 쇼핑 캐시백",ne:"LINE मार्फत किनमेल क्यासब्याक",bn:"LINE দিয়ে শপিং ক্যাশব্যাক",en:"Shopping cashback on LINE"},
+  hero_t1:{vi:"Mua sắm trên Rakuten,",ja:"楽天でお買い物して、",zh:"在乐天购物，",ko:"라쿠텐에서 쇼핑하고,",ne:"Rakuten मा किनमेल गर्नुहोस्,",bn:"Rakuten-এ কেনাকাটা করুন,",en:"Shop on Rakuten,"},
+  hero_t2:{vi:"nhận lại tiền.",ja:"お金が戻る。",zh:"拿回现金。",ko:"돈을 돌려받으세요.",ne:"पैसा फिर्ता पाउनुहोस्।",bn:"টাকা ফেরত পান।",en:"get money back."},
+  hero_sub:{vi:"Chỉ cần bấm nút Share của Rakuten rồi gửi vào bot オトク — bot tự trả lại link hoàn tiền. Bạn bấm link đó mua như bình thường, tiền tự về số dư. Hoàn toàn miễn phí.",ja:"楽天の「シェア」ボタンを押してオトクBotに送るだけ。botが還元リンクを自動で返信します。そのリンクから普通に購入すれば残高に反映。完全無料。",zh:"只需点乐天的“分享”按钮发给オトクBot——bot会自动回复返现链接。点该链接照常购买，钱自动进余额。完全免费。",ko:"라쿠텐 ‘공유’ 버튼을 눌러 オトク Bot에 보내기만 하면, 봇이 캐시백 링크를 자동으로 보냅니다. 그 링크로 평소처럼 구매하면 잔액에 적립. 완전 무료.",ne:"Rakuten को ‘Share’ बटन थिचेर オトク Bot लाई पठाउनुहोस् — बटले क्यासब्याक लिङ्क स्वतः फिर्ता पठाउँछ। त्यही लिङ्कबाट सधैंझैं किन्नुहोस्, पैसा ब्यालेन्समा। पूर्ण निःशुल्क।",bn:"শুধু Rakuten-এর ‘Share’ বোতাম চেপে オトク Bot-এ পাঠান — বট নিজেই ক্যাশব্যাক লিঙ্ক ফেরত দেবে। সেই লিঙ্কে স্বাভাবিকভাবে কিনুন, টাকা ব্যালেন্সে। সম্পূর্ণ ফ্রি।",en:"Just tap Rakuten's Share button and send it to オトク Bot — the bot replies with a cashback link automatically. Buy through that link as usual and the money lands in your balance. Completely free."},
+  hero_cta:{vi:"Thêm bạn trên LINE",ja:"LINEで友だち追加",zh:"在LINE加好友",ko:"LINE 친구 추가",ne:"LINE मा साथी थप्नुहोस्",bn:"LINE-এ বন্ধু যোগ করুন",en:"Add on LINE"},
+  hero_cta2:{vi:"Xem cách dùng",ja:"使い方を見る",zh:"查看使用方法",ko:"사용법 보기",ne:"प्रयोग गर्ने तरिका",bn:"কীভাবে কাজ করে",en:"See how it works"},
+  hero_note:{vi:"Miễn phí · Không phí ẩn · Tiền về số dư",ja:"無料 · 隠れた費用なし · 残高に反映",zh:"免费 · 无隐藏费用 · 进入余额",ko:"무료 · 숨은 비용 없음 · 잔액 적립",ne:"निःशुल्क · लुकेको शुल्क छैन · ब्यालेन्समा",bn:"ফ্রি · কোনো লুকানো খরচ নেই · ব্যালেন্সে",en:"Free · No hidden fees · Straight to your balance"},
+
+  shareflow_t:{vi:"Chỉ cần bấm “Share” trên Rakuten — bot lo phần còn lại",ja:"楽天で「シェア」を押すだけ — あとはbotにおまかせ",zh:"只需在乐天点“分享”——其余交给bot",ko:"라쿠텐에서 ‘공유’만 누르면 — 나머지는 봇이 처리",ne:"Rakuten मा ‘Share’ थिच्नुहोस् — बाँकी बटले गर्छ",bn:"Rakuten-এ শুধু ‘Share’ চাপুন — বাকিটা বট করবে",en:"Just tap “Share” on Rakuten — the bot does the rest"},
+  shareflow_link:{vi:"Link hoàn tiền",ja:"還元リンク",zh:"返现链接",ko:"캐시백 링크",ne:"क्यासब्याक लिङ्क",bn:"ক্যাশব্যাক লিঙ্ক",en:"Cashback link"},
+  peek_share:{vi:"Đã share sản phẩm Rakuten",ja:"楽天の商品をシェア",zh:"已分享乐天商品",ko:"라쿠텐 상품 공유함",ne:"Rakuten सामान सेयर गरियो",bn:"Rakuten পণ্য শেয়ার করা হলো",en:"Shared a Rakuten item"},
+  peek_b1:{vi:"Máy massage cổ · ¥3,000 · Hoàn lại <b>~¥30</b> 🌸 Bấm link dưới để mua nhé:",ja:"首マッサージャー · ¥3,000 · 還元 <b>~¥30</b> 🌸 下のリンクから購入してね:",zh:"颈部按摩仪 · ¥3,000 · 返现 <b>~¥30</b> 🌸 点下面的链接购买:",ko:"목 마사지기 · ¥3,000 · 캐시백 <b>~¥30</b> 🌸 아래 링크로 구매하세요:",ne:"घाँटी मसाजर · ¥3,000 · फिर्ता <b>~¥30</b> 🌸 तलको लिङ्कबाट किन्नुहोस्:",bn:"নেক ম্যাসাজার · ¥3,000 · ক্যাশব্যাক <b>~¥30</b> 🌸 নিচের লিঙ্কে কিনুন:",en:"Neck massager · ¥3,000 · Cashback <b>~¥30</b> 🌸 Buy via the link below:"},
+  peek_b2:{vi:"Đã ghi nhận! Số dư của bạn: <b>¥30</b>",ja:"記録しました！あなたの残高: <b>¥30</b>",zh:"已记录！你的余额：<b>¥30</b>",ko:"기록되었습니다! 잔액: <b>¥30</b>",ne:"रेकर्ड भयो! तपाईंको ब्यालेन्स: <b>¥30</b>",bn:"রেকর্ড হয়েছে! আপনার ব্যালেন্স: <b>¥30</b>",en:"Recorded! Your balance: <b>¥30</b>"},
+
+  bx_tag:{vi:"Vì sao chọn オトク",ja:"オトクの良いところ",zh:"为何选择オトク",ko:"オトク를 쓰는 이유",ne:"किन オトク",bn:"কেন オトク",en:"Why オトク"},
+  bx_title:{vi:"Đơn giản, an toàn, miễn phí",ja:"かんたん・安全・無料",zh:"简单、安全、免费",ko:"간단·안전·무료",ne:"सरल, सुरक्षित, निःशुल्क",bn:"সহজ, নিরাপদ, ফ্রি",en:"Simple, safe, free"},
+  bx1_t:{vi:"Miễn phí 100%",ja:"完全無料",zh:"100%免费",ko:"100% 무료",ne:"१००% निःशुल्क",bn:"১০০% ফ্রি",en:"100% free"},
+  bx1_d:{vi:"Mua đúng giá Rakuten, không phí ẩn, không thu thêm.",ja:"楽天と同じ価格。隠れた費用も追加料金もなし。",zh:"乐天原价，无隐藏费用，不额外收费。",ko:"라쿠텐 원가 그대로, 숨은 비용·추가 요금 없음.",ne:"Rakuten कै मूल्य, लुकेको वा थप शुल्क छैन।",bn:"Rakuten-এর একই দাম, কোনো লুকানো বা বাড়তি খরচ নেই।",en:"Same Rakuten price — no hidden or extra fees."},
+  bx2_t:{vi:"Chỉ cần Share",ja:"シェアするだけ",zh:"只需分享",ko:"공유만 하면 끝",ne:"Share गर्दा पुग्छ",bn:"শুধু Share",en:"Just Share"},
+  bx2_d:{vi:"Không cần copy link thủ công — bấm Share là bot lo hết.",ja:"リンクを手動でコピー不要 — シェアすればbotが全部やります。",zh:"无需手动复制链接——一键分享，bot全搞定。",ko:"링크를 직접 복사할 필요 없이 — 공유하면 봇이 다 처리.",ne:"लिङ्क हातैले कपी गर्नु पर्दैन — Share गर्नुस्, बटले सब गर्छ।",bn:"হাতে লিঙ্ক কপি করার দরকার নেই — Share করলেই বট সব করে।",en:"No manual copying — just Share and the bot handles it."},
+  bx3_t:{vi:"7 ngôn ngữ",ja:"7言語対応",zh:"支持7种语言",ko:"7개 언어 지원",ne:"७ भाषा",bn:"৭টি ভাষা",en:"7 languages"},
+  bx3_d:{vi:"Việt · Nhật · Trung · Hàn · Nepal · Bengali · Anh.",ja:"ベトナム · 日本 · 中国 · 韓国 · ネパール · ベンガル · 英語。",zh:"越南 · 日本 · 中文 · 韩国 · 尼泊尔 · 孟加拉 · 英语。",ko:"베트남 · 일본 · 중국 · 한국 · 네팔 · 벵골 · 영어.",ne:"भियतनामी · जापानी · चिनियाँ · कोरियन · नेपाली · बंगाली · अंग्रेजी।",bn:"ভিয়েতনামি · জাপানি · চীনা · কোরিয়ান · নেপালি · বাংলা · ইংরেজি।",en:"Vietnamese · Japanese · Chinese · Korean · Nepali · Bengali · English."},
+
+  how_tag:{vi:"Cách dùng",ja:"使い方",zh:"使用方法",ko:"사용법",ne:"प्रयोग विधि",bn:"ব্যবহার বিধি",en:"How to use"},
+  how_title:{vi:"6 bước đơn giản",ja:"かんたん6ステップ",zh:"简单6步",ko:"간단한 6단계",ne:"सजिलो ६ चरण",bn:"সহজ ৬ ধাপ",en:"6 simple steps"},
+  how_sub:{vi:"Bạn vẫn mua trực tiếp trên Rakuten — bot chỉ giúp lấy link hoàn tiền, không qua trung gian thanh toán.",ja:"購入は楽天で直接。botは還元リンクを用意するだけで、支払いの仲介はしません。",zh:"你仍直接在乐天购买——bot只帮你拿返现链接，不经过支付中介。",ko:"구매는 라쿠텐에서 직접. 봇은 캐시백 링크만 만들 뿐 결제를 중개하지 않습니다.",ne:"किनमेल सिधै Rakuten मै — बटले क्यासब्याक लिङ्क मात्र दिन्छ, भुक्तानी बिचौलिया होइन।",bn:"কেনাকাটা সরাসরি Rakuten-এই — বট শুধু ক্যাশব্যাক লিঙ্ক দেয়, পেমেন্ট মধ্যস্থতা করে না।",en:"You still buy directly on Rakuten — the bot only provides the cashback link, it's not a payment middleman."},
+  s1_t:{vi:"Kết bạn với bot",ja:"botを友だち追加",zh:"加bot为好友",ko:"봇 친구 추가",ne:"बटसँग साथी बन्नुहोस्",bn:"বটকে বন্ধু বানান",en:"Add the bot"},
+  s1_d:{vi:"Thêm オトク Bot làm bạn trên LINE.",ja:"LINEでオトクBotを友だち追加します。",zh:"在LINE上添加オトクBot为好友。",ko:"LINE에서 オトク Bot을 친구로 추가하세요.",ne:"LINE मा オトク Bot लाई साथी थप्नुहोस्।",bn:"LINE-এ オトク Bot কে বন্ধু বানান।",en:"Add オトク Bot as a friend on LINE."},
+  s2_t:{vi:"Mở sản phẩm trên Rakuten",ja:"楽天で商品を開く",zh:"在乐天打开商品",ko:"라쿠텐에서 상품 열기",ne:"Rakuten मा सामान खोल्नुहोस्",bn:"Rakuten-এ পণ্য খুলুন",en:"Open the item on Rakuten"},
+  s2_d:{vi:"Trong app hoặc web Rakuten, mở trang sản phẩm bạn muốn mua.",ja:"楽天アプリかサイトで、買いたい商品のページを開きます。",zh:"在乐天App或网站打开你想买的商品页面。",ko:"라쿠텐 앱이나 웹에서 사려는 상품 페이지를 엽니다.",ne:"Rakuten एप वा वेबमा किन्न चाहेको सामानको पेज खोल्नुहोस्।",bn:"Rakuten অ্যাপ বা ওয়েবে যে পণ্য কিনতে চান তার পেজ খুলুন।",en:"In the Rakuten app or site, open the product page you want."},
+  s3_t:{vi:"Bấm “Share” → オトク",ja:"「シェア」→ オトク",zh:"点“分享”→ オトク",ko:"‘공유’ → オトク",ne:"‘Share’ → オトク",bn:"‘Share’ → オトク",en:"Tap “Share” → オトク"},
+  s3_d:{vi:"Bấm nút Share (シェア) của Rakuten, chọn LINE rồi chọn オトク Bot.",ja:"楽天の「シェア」ボタンを押し、LINEからオトクBotを選びます。",zh:"点乐天的“分享”按钮，选择LINE再选オトクBot。",ko:"라쿠텐 ‘공유’ 버튼을 누르고 LINE에서 オトク Bot을 선택하세요.",ne:"Rakuten को ‘Share’ बटन थिची LINE छानेर オトク Bot रोज्नुहोस्।",bn:"Rakuten-এর ‘Share’ বোতাম চেপে LINE বেছে オトク Bot নির্বাচন করুন।",en:"Tap Rakuten's Share button, choose LINE, then pick オトク Bot."},
+  s4_t:{vi:"Bot trả lại link",ja:"botがリンクを返信",zh:"bot回复链接",ko:"봇이 링크 회신",ne:"बटले लिङ्क पठाउँछ",bn:"বট লিঙ্ক ফেরত দেয়",en:"The bot replies with a link"},
+  s4_d:{vi:"Bot tự động gửi link hoàn tiền kèm số tiền hoàn dự kiến.",ja:"botが還元予定額つきの還元リンクを自動で送ります。",zh:"bot自动发来带预计返现的返现链接。",ko:"봇이 예상 캐시백과 함께 캐시백 링크를 자동으로 보냅니다.",ne:"बटले अनुमानित क्यासब्याकसहित क्यासब्याक लिङ्क स्वतः पठाउँछ।",bn:"বট আনুমানিক ক্যাশব্যাকসহ ক্যাশব্যাক লিঙ্ক স্বয়ংক্রিয় পাঠায়।",en:"The bot automatically sends a cashback link with the estimated amount."},
+  s5_t:{vi:"Mua qua link → Done",ja:"リンクで購入 →「Done」",zh:"用链接购买 →“Done”",ko:"링크로 구매 → ‘Done’",ne:"लिङ्कबाट किन्नुहोस् → ‘Done’",bn:"লিঙ্ক দিয়ে কিনুন → ‘Done’",en:"Buy via the link → Done"},
+  s5_d:{vi:"Bấm vào link bot gửi, mua như bình thường, rồi bấm “Done”.",ja:"botのリンクをタップして購入し、「Done」を押します。",zh:"点击bot发的链接购买，然后点“Done”。",ko:"봇이 보낸 링크로 구매한 뒤 ‘Done’을 누르세요.",ne:"बटको लिङ्क थिचेर किन्नुहोस्, अनि ‘Done’ थिच्नुहोस्।",bn:"বটের লিঙ্কে কিনুন, তারপর ‘Done’ চাপুন।",en:"Tap the bot's link, buy as usual, then tap “Done”."},
+  s6_t:{vi:"Nhận tiền & rút",ja:"受け取り＆出金",zh:"收款并提现",ko:"적립 & 출금",ne:"पैसा लिनुहोस् र निकाल्नुहोस्",bn:"টাকা নিন ও তুলুন",en:"Get paid & withdraw"},
+  s6_d:{vi:"Đơn xác nhận → tiền vào số dư → rút khi đủ mức.",ja:"注文確定 → 残高に反映 → 一定額で出金。",zh:"订单确认 → 进入余额 → 达到额度即可提现。",ko:"주문 확정 → 잔액 적립 → 기준 도달 시 출금.",ne:"अर्डर पुष्टि → ब्यालेन्समा पैसा → सीमा पुगे निकाल्नुहोस्।",bn:"অর্ডার নিশ্চিত → ব্যালেন্সে টাকা → সীমা পূর্ণ হলে তুলুন।",en:"Order confirmed → added to balance → withdraw when eligible."},
+
+  cb_tag:{vi:"Bạn nhận bao nhiêu",ja:"いくら戻る？",zh:"你能拿多少",ko:"얼마나 받나요",ne:"कति पाउनुहुन्छ",bn:"কত পাবেন",en:"How much you get"},
+  cb_title:{vi:"Tiền hoàn của bạn",ja:"あなたの還元額",zh:"你的返现",ko:"당신의 캐시백",ne:"तपाईंको क्यासब्याक",bn:"আপনার ক্যাশব্যাক",en:"Your cashback"},
+  cb_lead:{vi:"Với mỗi đơn, bạn được hoàn lại <b>50–80% tiền hoa hồng</b> tùy món hàng. Bạn vẫn mua đúng giá Rakuten, không tốn thêm đồng nào.",ja:"ご注文ごとに、商品に応じて<b>手数料の50〜80%</b>を還元。楽天と同じ価格で、追加費用は一切なし。",zh:"每笔订单，按商品返还<b>佣金的50–80%</b>。仍是乐天原价，不额外花一分钱。",ko:"주문마다 상품에 따라 <b>수수료의 50–80%</b>를 돌려드립니다. 라쿠텐과 같은 가격, 추가 비용 없음.",ne:"हरेक अर्डरमा, सामान अनुसार <b>कमिसनको ५०–८०%</b> फिर्ता। Rakuten कै मूल्यमा, थप खर्च छैन।",bn:"প্রতিটি অর্ডারে, পণ্য অনুযায়ী <b>কমিশনের ৫০–৮০%</b> ফেরত পান। Rakuten-এর একই দামে, কোনো বাড়তি খরচ নেই।",en:"On each order you get back <b>50–80% of the commission</b>, depending on the item. Same Rakuten price, nothing extra to pay."},
+  cb_price_l:{vi:"Giá đơn hàng",ja:"注文金額",zh:"订单金额",ko:"주문 금액",ne:"अर्डर मूल्य",bn:"অর্ডার মূল্য",en:"Order amount"},
+  cb_out_k:{vi:"Bạn nhận lại (ước tính)",ja:"還元額（目安）",zh:"返现（估算）",ko:"예상 캐시백",ne:"अनुमानित क्यासब्याक",bn:"আনুমানিক ক্যাশব্যাক",en:"You get back (estimate)"},
+  cb_out_note:{vi:"Ước tính ở mức hoa hồng ~4%, hoàn 50–80% tùy món. Có thể cao/thấp hơn theo từng shop.",ja:"手数料~4%・還元50〜80%での目安。商品やショップにより変動します。",zh:"按佣金~4%、返还50–80%估算。会因商品和店铺而不同。",ko:"수수료 ~4%, 캐시백 50–80% 기준 추정. 상품·매장에 따라 달라질 수 있습니다.",ne:"~४% कमिसन र ५०–८०% फिर्ता मानेर अनुमान। सामान/पसल अनुसार फरक हुन सक्छ।",bn:"~৪% কমিশন ও ৫০–৮০% ক্যাশব্যাক ধরে আনুমানিক। পণ্য/দোকান অনুযায়ী বদলাতে পারে।",en:"Estimate at ~4% commission and 50–80% cashback. Varies by item and shop."},
+
+  faq_tag:{vi:"Hỏi đáp",ja:"Q&A",zh:"问答",ko:"질문과 답변",ne:"प्रश्नोत्तर",bn:"প্রশ্নোত্তর",en:"FAQ"},
+  faq_title:{vi:"Câu hỏi thường gặp",ja:"よくある質問",zh:"常见问题",ko:"자주 묻는 질문",ne:"प्रायः सोधिने प्रश्न",bn:"সাধারণ প্রশ্ন",en:"Frequently asked questions"},
+  q6:{vi:"Tôi “Share” vào bot kiểu gì?",ja:"どうやってbotに「シェア」する？",zh:"怎么“分享”给bot？",ko:"봇에 어떻게 ‘공유’하나요?",ne:"बटमा कसरी ‘Share’ गर्ने?",bn:"বটে কীভাবে ‘Share’ করব?",en:"How do I “Share” to the bot?"},
+  a6:{vi:"Mở sản phẩm trên Rakuten → bấm nút Share (シェア) → chọn LINE → chọn オトク Bot. Bot sẽ tự trả lại link hoàn tiền cho bạn mua.",ja:"楽天で商品を開く →「シェア」→ LINE → オトクBotを選ぶだけ。botが還元リンクを返します。",zh:"在乐天打开商品 →点“分享”→选LINE →选オトクBot。bot会回复返现链接供你购买。",ko:"라쿠텐에서 상품 열기 → ‘공유’ → LINE → オトク Bot 선택. 봇이 캐시백 링크를 보냅니다.",ne:"Rakuten मा सामान खोल्नुहोस् → ‘Share’ → LINE → オトク Bot रोज्नुहोस्। बटले क्यासब्याक लिङ्क पठाउँछ।",bn:"Rakuten-এ পণ্য খুলুন → ‘Share’ → LINE → オトク Bot বেছে নিন। বট ক্যাশব্যাক লিঙ্ক পাঠাবে।",en:"Open the item on Rakuten → tap Share → choose LINE → pick オトク Bot. The bot returns a cashback link to buy from."},
+  q1:{vi:"Tôi có mất phí không?",ja:"費用はかかりますか？",zh:"需要付费吗？",ko:"비용이 드나요?",ne:"मलाई शुल्क लाग्छ?",bn:"আমার কি খরচ লাগবে?",en:"Are there any fees?"},
+  a1:{vi:"Không. Hoàn toàn miễn phí. Bạn mua đúng giá trên Rakuten, còn được nhận thêm tiền hoàn.",ja:"いいえ。完全無料です。楽天と同じ価格で購入でき、さらに還元も受け取れます。",zh:"不需要。完全免费。你以乐天原价购买，还能额外获得返现。",ko:"아니요. 완전 무료입니다. 라쿠텐과 같은 가격에 구매하고 캐시백도 받습니다.",ne:"छैन। पूर्ण निःशुल्क। Rakuten कै मूल्यमा किन्नुहुन्छ र थप क्यासब्याक पनि।",bn:"না। সম্পূর্ণ ফ্রি। Rakuten-এর একই দামে কিনে উপরন্তু ক্যাশব্যাক পাবেন।",en:"No. It's completely free. You pay the normal Rakuten price and still get cashback."},
+  q2:{vi:"Khi nào tôi nhận được tiền?",ja:"いつお金を受け取れますか？",zh:"我什么时候能拿到钱？",ko:"언제 받나요?",ne:"पैसा कहिले पाउँछु?",bn:"টাকা কখন পাব?",en:"When do I get the money?"},
+  a2:{vi:"Sau khi Rakuten xác nhận đơn của bạn (thường vài ngày đến cuối tháng), tiền sẽ vào số dư.",ja:"楽天が注文を確定した後（通常は数日〜月末）、残高に反映されます。",zh:"在乐天确认订单后（通常几天到月底），金额会进入你的余额。",ko:"라쿠텐이 주문을 확정한 후(보통 며칠~월말) 잔액에 반영됩니다.",ne:"Rakuten ले अर्डर पुष्टि गरेपछि (केही दिनदेखि महिनाको अन्त्यसम्म) ब्यालेन्समा आउँछ।",bn:"Rakuten অর্ডার নিশ্চিত করার পর (কয়েক দিন থেকে মাসের শেষ) ব্যালেন্সে আসবে।",en:"After Rakuten confirms your order (usually a few days to end of month), it's added to your balance."},
+  q3:{vi:"Rút tiền thế nào?",ja:"出金方法は？",zh:"如何提现？",ko:"출금은 어떻게 하나요?",ne:"पैसा कसरी निकाल्ने?",bn:"টাকা কীভাবে তুলব?",en:"How do I withdraw?"},
+  a3:{vi:"Khi số dư đạt mức tối thiểu, bấm “Rút tiền” trong menu và làm theo hướng dẫn.",ja:"残高が最低額に達したら、メニューの「出金」を押して手順に従ってください。",zh:"当余额达到最低额度时，点击菜单中的“提现”并按指引操作。",ko:"잔액이 최소 금액에 도달하면 메뉴의 ‘출금’을 눌러 안내를 따르세요.",ne:"ब्यालेन्स न्यूनतम सीमा पुगेपछि मेनुमा “निकासी” थिचेर निर्देशन पालना गर्नुहोस्।",bn:"ব্যালেন্স ন্যূনতম সীমায় পৌঁছালে মেনুতে “উত্তোলন” চেপে নির্দেশ অনুসরণ করুন।",en:"When your balance reaches the minimum, tap “Withdraw” in the menu and follow the steps."},
+  q4:{vi:"Có an toàn không?",ja:"安全ですか？",zh:"安全吗？",ko:"안전한가요?",ne:"सुरक्षित छ?",bn:"এটা কি নিরাপদ?",en:"Is it safe?"},
+  a4:{vi:"Bạn mua trực tiếp trên Rakuten. Bot chỉ tạo link và tính tiền hoàn — không giữ thông tin thanh toán của bạn.",ja:"購入は楽天で直接行います。botはリンク作成と還元計算をするだけで、お支払い情報は保持しません。",zh:"你直接在乐天购买。bot只生成链接和计算返现，不保存你的支付信息。",ko:"구매는 라쿠텐에서 직접 합니다. 봇은 링크 생성과 캐시백 계산만 하며 결제 정보를 보관하지 않습니다.",ne:"तपाईं सिधै Rakuten मा किन्नुहुन्छ। बटले लिङ्क र क्यासब्याक मात्र गर्छ — भुक्तानी जानकारी राख्दैन।",bn:"আপনি সরাসরি Rakuten-এ কেনেন। বট শুধু লিঙ্ক ও ক্যাশব্যাক হিসাব করে — পেমেন্ট তথ্য রাখে না।",en:"You buy directly on Rakuten. The bot only creates the link and calculates cashback — it never stores your payment details."},
+  q5:{vi:"Lỡ mua mà không bấm link bot thì sao?",ja:"botのリンクを押さずに買ったら？",zh:"如果没点bot的链接就买了怎么办？",ko:"봇 링크를 누르지 않고 샀다면?",ne:"बटको लिङ्क नथिची किने भने?",bn:"বটের লিঙ্ক না চেপে কিনলে?",en:"What if I buy without the bot's link?"},
+  a5:{vi:"Phải mua qua đúng link bot gửi thì mới được tính hoàn tiền. Hãy luôn bấm link đó trước khi đặt hàng.",ja:"botが送ったリンクから購入した場合のみ還元対象です。注文前に必ずそのリンクを押してください。",zh:"只有通过bot发送的链接购买才能获得返现。下单前请务必点击该链接。",ko:"봇이 보낸 링크로 구매할 때만 캐시백이 적용됩니다. 주문 전에 반드시 그 링크를 누르세요.",ne:"बटले पठाएकै लिङ्कबाट किन्दा मात्र क्यासब्याक गनिन्छ। अर्डरअघि सधैं त्यही लिङ्क थिच्नुहोस्।",bn:"শুধু বটের পাঠানো লিঙ্ক থেকে কিনলেই ক্যাশব্যাক গণনা হয়। অর্ডারের আগে সেই লিঙ্কে ট্যাপ করুন।",en:"Cashback only counts if you buy through the bot's link. Always tap it before ordering."},
+
+  final_title:{vi:"Bắt đầu nhận tiền hôm nay",ja:"今日から受け取り開始",zh:"今天就开始拿返现",ko:"오늘부터 받아보세요",ne:"आजै कमाउन सुरु गर्नुहोस्",bn:"আজই শুরু করুন",en:"Start earning today"},
+  final_sub:{vi:"Kết bạn với bot, Share sản phẩm đầu tiên và xem tiền về.",ja:"botを友だち追加して、最初の商品をシェアして、還元を確認しましょう。",zh:"加bot为好友，分享第一个商品，看着钱回来。",ko:"봇을 친구 추가하고 첫 상품을 공유해 캐시백을 확인하세요.",ne:"बटसँग साथी बन्नुहोस्, पहिलो सामान Share गर्नुहोस्, पैसा फर्केको हेर्नुहोस्।",bn:"বটকে বন্ধু বানান, প্রথম পণ্য Share করুন, টাকা ফেরত দেখুন।",en:"Add the bot, Share your first item, and watch the money come back."},
+  final_cta:{vi:"Thêm bạn trên LINE 🌸",ja:"LINEで友だち追加 🌸",zh:"在LINE加好友 🌸",ko:"LINE 친구 추가 🌸",ne:"LINE मा साथी थप्नुहोस् 🌸",bn:"LINE-এ বন্ধু যোগ করুন 🌸",en:"Add on LINE 🌸"},
+  footer_fine:{vi:"オトク không trực thuộc và không được tài trợ bởi Rakuten hay LINE. Tiền hoàn phụ thuộc vào việc Rakuten xác nhận đơn hàng.",ja:"オトクは楽天およびLINEと提携・出資関係にありません。還元は楽天が注文を確定した場合にのみ受け取れます。",zh:"オトク与乐天或LINE无任何关联或赞助关系。返现仅在乐天确认订单后发放。",ko:"オトク는 라쿠텐 또는 LINE과 제휴·후원 관계가 없습니다. 캐시백은 라쿠텐이 주문을 확정한 경우에만 지급됩니다.",ne:"オトク, Rakuten वा LINE सँग सम्बन्धित वा प्रायोजित होइन। क्यासब्याक Rakuten ले अर्डर पुष्टि गरेमा मात्र पाइन्छ।",bn:"オトク, Rakuten বা LINE-এর সাথে যুক্ত বা স্পনসর্ড নয়। Rakuten অর্ডার নিশ্চিত করলে তবেই ক্যাশব্যাক পাওয়া যায়।",en:"オトク is not affiliated with or sponsored by Rakuten or LINE. Cashback depends on Rakuten confirming the order."}
+};
+
+const yen=n=>'¥'+Math.round(n).toLocaleString('en-US');
+function sp(p){document.getElementById('price').value=p;calc();}
+function calc(){
+  const price=+document.getElementById('price').value;
+  document.getElementById('vPrice').textContent=yen(price);
+  const low=price*0.04*0.5, high=price*0.04*0.8;
+  document.getElementById('oCash').textContent='~'+yen(low)+' – '+yen(high);
+}
+function setLang(l){
+  document.documentElement.lang=l;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(I18N[k] && I18N[k][l]!=null) el.innerHTML=I18N[k][l];
+  });
+  const sel=document.getElementById('langSel'); if(sel) sel.value=l;
+}
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colors=['#F8C6D3','#FADCE4','#F4B8C8','#FFE3EA'];
+  for(let i=0;i<9;i++){
+    const s=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    s.setAttribute('viewBox','0 0 20 20');s.classList.add('petal-f');
+    const w=12+Math.random()*12; s.style.width=w+'px';s.style.height=w+'px';
+    s.style.left=Math.random()*100+'vw'; s.style.opacity=(.4+Math.random()*.4).toFixed(2);
+    const dur=(9+Math.random()*9).toFixed(1);
+    s.style.animation=`fall ${dur}s linear ${(-Math.random()*dur).toFixed(1)}s infinite`;
+    s.innerHTML=`<path d="M10 1 C13 5 18 7 17 12 C16 17 12 19 10 19 C8 19 4 17 3 12 C2 7 7 5 10 1 Z" fill="${colors[i%colors.length]}"/>`;
+    document.body.appendChild(s);
   }
-
-  // scroll reveal
-  const io=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
-  },{threshold:.15});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-  // count up
-  const counters=document.querySelectorAll('[data-count]');
-  const cio=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(!e.isIntersecting) return;
-      const el=e.target, target=+el.dataset.count, suf=el.dataset.suffix||'';
-      let cur=0; const step=Math.ceil(target/40);
-      const t=setInterval(()=>{ cur+=step; if(cur>=target){cur=target;clearInterval(t);} el.textContent=cur+suf; },28);
-      cio.unobserve(el);
-    });
-  },{threshold:.5});
-  counters.forEach(c=>cio.observe(c));
+})();
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+setLang('vi'); calc();
 </script>
 </body>
 </html>
